@@ -192,59 +192,36 @@ void ui_main(Database d)
     printf("2 : show database rules\n");
     printf("3 : add statement\n");
     printf("4 : edit statement\n");
-    printf("5 : \n");
+    printf("5 : add rule\n");
     printf("6 : \n");
     printf("7 : \n");
     printf("8 : \n");
     printf("9 : \n");
-    printf("10 : \n");
-    printf("11 : \n");
-    printf("12 : \n");
+    printf("0 : \n");
 
     inpt = ui_input_int(1,12);
 
     switch(inpt) {
-    case 1:
+    case 1: //show database statement
       s_print(d.statements);
       break;
 
-    case 2:
+    case 2: //show database rules
       r_print(d.rules, d.statements);
       break;
 
-    case 3:
-       printf("Please input the statement description :\n");
-       ui_input_char(inpt_char, forbiden_char);
-       d = d_append_statement(d, inpt_char);
-       break;
-
-    case 4:
-      length = s_length(d.statements);
-      if (length == 0){
-        printf("This database has no statement !\n");
-      }
-      else{
-        s_print(d.statements);
-        printf("-1 : cancel action\n");
-        printf("Please chose the statement to edit :\n");
-        inpt = ui_input_int(0,10000);
-
-        if (inpt != -1){
-          while (!s_contains(d.statements, inpt)){
-            printf("Id not found in this database statement list.\n Please input again : ");
-            inpt = ui_input_int(0,10000);
-          }
-
-          printf("Please input the new statement description :\n");
-          ui_input_char(inpt_char, forbiden_char);
-
-          s_edit_description(d.statements, inpt, inpt_char);
-        }
-      }
+    case 3: //add statement
+      printf("Please input the statement description :\n");
+      ui_input_char(inpt_char, forbiden_char);
+      d = d_append_statement(d, inpt_char);
       break;
 
-    case 5:
-      //return 1; //exit code
+    case 4: //edit statement
+      ui_edit_statment(d);
+      break;
+
+    case 5: //add rule
+
       break;
 
     default : //Raise error
@@ -255,7 +232,35 @@ void ui_main(Database d)
 }
 
 
+void ui_edit_statment(Database d)
+{
+  int inpt;
+  char inpt_char[255];
+  char forbiden_char[12] = "/\\.";
+  int length = s_length(d.statements);
+  if (length == 0){
+    printf("This database has no statement !\n");
+    return;
+  }
 
+  s_print(d.statements);
+  printf("-1 : cancel action\n");
+  printf("Please chose the statement to edit :\n");
+
+  inpt = ui_input_int(0,10000);
+  while (!s_contains(d.statements, inpt)){
+    if (inpt == -1){
+      return;
+    }
+    printf("Id not found in this database statement list.\n Please input again : ");
+    inpt = ui_input_int(0,10000);
+  }
+
+  printf("Please input the new statement description :\n");
+  ui_input_char(inpt_char, forbiden_char);
+
+  s_edit_description(d.statements, inpt, inpt_char);
+}
 
 
 

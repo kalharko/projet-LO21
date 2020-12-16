@@ -25,4 +25,9 @@ void ui_create_database();
 //main interaction screen with the loaded database
 void ui_main(Database d);
 
+//screen to edit a statment
+void ui_edit_statment(Database d);
+
+
+
 #endif
