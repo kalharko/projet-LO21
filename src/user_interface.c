@@ -14,6 +14,7 @@ int ui_input_int(int min, int max)
   char inpt_char[12];
   int inpt_int;
   printf("Go to : ");
+  fflush(stdin);
   scanf("%s", inpt_char);
 
   inpt_int = atoi(inpt_char);
@@ -23,6 +24,7 @@ int ui_input_int(int min, int max)
     }
     printf("Please input a number between %d and %d\n", min, max);
     printf("Go to : ");
+    fflush(stdin);
     scanf("%s", inpt_char);
     inpt_int = atoi(inpt_char);
   }
@@ -34,14 +36,15 @@ int ui_input_int(int min, int max)
 
 void ui_input_char(char * inpt_char, char * forbiden_char)
 {
-  fflush(stdin);
   char *test_result;
+  fflush(stdin);
   scanf("%[^\n]", inpt_char);
 
   test_result = strpbrk(inpt_char, forbiden_char);
   while (test_result){
     printf("These characters are forbiden : \"%s\"\n", forbiden_char);
     printf("Please input again : ");
+    fflush(stdin);
     scanf("%s", inpt_char);
     test_result = strpbrk(inpt_char, forbiden_char);
   }
@@ -221,7 +224,7 @@ void ui_main(Database d)
       break;
 
     case 5: //add rule
-
+      ui_add_rule(d);
       break;
 
     default : //Raise error
@@ -261,6 +264,66 @@ void ui_edit_statment(Database d)
 
   s_edit_description(d.statements, inpt, inpt_char);
 }
+
+
+void ui_add_rule(Database d)
+{
+  s_print(d.statements);
+  printf("Chose from the database's statments those that are part of this new rule premise.\n");
+  printf("You can for example input : \"1,3,4\" to select statments 1,3 and 4 to be in the premise\n");
+  printf("Selected statments : ");
+
+  char inpt_char[255];
+  char forbiden_char[85] = "/\\. ;':|()!@#$%^&*_+-=<>?[]{}abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  ui_input_char(inpt_char, forbiden_char);
+
+  i_list premise = NULL;
+  premise = i_insert(premise, 2);
+  int head, head2, inpt, id_premise;
+  char c[12];
+  bool loop = true;
+
+  while (loop){
+    premise = i_empty(premise);
+    loop = false;
+    ui_input_char(inpt_char, forbiden_char);
+
+    head = 0;
+    while (inpt_char[head] != '\0'){
+      head2 = 0;
+      while (inpt_char[head] != ',' && inpt_char[head] != '\0'){
+        c[head2] = inpt_char[head];
+        head += 1;
+        head2 += 1;
+      }
+      c[head2] = '\0';
+      id_premise = atoi(c);
+      if (!s_contains(d.statements, id_premise)){
+        printf("Id not found in this database statement list.\n Please input again : ");
+        loop = true;
+      }
+
+      premise = i_insert(premise, id_premise);
+
+      if (inpt_char[head] != '\0'){
+        head += 1;
+      }
+    }
+  }
+
+  printf("Selected statments for the premise : ");
+  i_print(premise);
+
+  printf("\nNow chose a unique statment to be used as this new rule conclusion :\n");
+  inpt = ui_input_int(0,10000);
+  while (!s_contains(d.statements, inpt)){
+    printf("Id not found in this database statement list.\n Please input again : ");
+    inpt = ui_input_int(0,10000);
+  }
+
+  d = d_append_rule(d, premise, inpt);
+}
+
 
 
 
