@@ -1,4 +1,4 @@
-This is a project I made as a school project.
+This is a program I made as a school project.
 UTBM LO21 - A2020
 -Oscar Dewasmes
 
