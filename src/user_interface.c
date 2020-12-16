@@ -18,6 +18,9 @@ int ui_input_int(int min, int max)
 
   inpt_int = atoi(inpt_char);
   while (inpt_int > max || inpt_int < min){
+    if (inpt_int == -1){
+      return -1;
+    }
     printf("Please input a number between %d and %d\n", min, max);
     printf("Go to : ");
     scanf("%s", inpt_char);
@@ -222,15 +225,22 @@ void ui_main(Database d)
       }
       else{
         s_print(d.statements);
-        printf("Please chose the statement to edit :");
+        printf("-1 : cancel action\n");
+        printf("Please chose the statement to edit :\n");
         inpt = ui_input_int(0,10000);
 
-        printf("Please input the new statement description :\n");
-        ui_input_char(inpt_char, forbiden_char);
+        if (inpt != -1){
+          while (!s_contains(d.statements, inpt)){
+            printf("Id not found in this database statement list.\n Please input again : ");
+            inpt = ui_input_int(0,10000);
+          }
 
-        break;
+          printf("Please input the new statement description :\n");
+          ui_input_char(inpt_char, forbiden_char);
+
+          s_edit_description(d.statements, inpt, inpt_char);
+        }
       }
-
       break;
 
     case 5:

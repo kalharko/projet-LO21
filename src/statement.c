@@ -65,6 +65,15 @@ s_list s_empty(s_list s)
 }
 
 
+void s_edit_description(s_list s, int id, char * desc)
+{
+  statement_elem * current = s_get_from_id(s, id);
+  free(current->description);
+  current->description = malloc(strlen(desc)+1);
+  strcpy(current->description, desc);
+}
+
+
 
 /* s_list look up */
 

@@ -31,6 +31,9 @@ s_list s_remove_id(s_list s, int id);
 //Free the memory of every statement of the given s_list
 s_list s_empty(s_list s);
 
+//Edits the given statement's description
+void s_edit_description(s_list s, int id, char * desc);
+
 
   /* s_list look up */
 
