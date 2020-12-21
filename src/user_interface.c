@@ -2,10 +2,125 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "tinydir.h"
-
 #include "user_interface.h"
 #include "database.h"
+
+#if defined(_WIN32)
+  #include "tinydir.h"
+  void ui_load_database()
+  {
+    printf("Chose a database to load :\n");
+
+    int i = 1, len;
+    char buffer[50];
+    tinydir_dir dir;
+    tinydir_file file;
+    tinydir_open(&dir, "saves");
+    tinydir_next(&dir);
+    tinydir_next(&dir);
+
+    //displays the databases to chose from
+    while (dir.has_next)
+    {
+      tinydir_readfile(&dir, &file);
+
+      len = strlen(file.name);
+      strncpy(buffer, file.name, len-4);
+      buffer[len-4] = '\0';
+      printf("%d : %s", i, buffer);
+      printf("\n");
+
+      tinydir_next(&dir);
+      i += 1;
+    }
+    tinydir_close(&dir);
+
+    if (i == 1){ //if no database to chose from
+      printf("No database to chose from !\nPlease create a new database\n");
+      return;
+    }
+
+    int inpt = ui_input_int(1,i-1); //get user input
+    Database d;
+
+    i = 1;
+    tinydir_open(&dir, "saves");
+    tinydir_next(&dir);
+    tinydir_next(&dir);
+    //get the database to load from
+    while (dir.has_next)
+    {
+      tinydir_readfile(&dir, &file);
+
+      if (i == inpt){
+        len = strlen(file.name);
+        strncpy(buffer, file.name, len-4);
+        buffer[len-4] = '\0';
+
+        d = d_load(buffer);
+        break;
+      }
+      tinydir_next(&dir);
+      i += 1;
+    }
+    tinydir_close(&dir);
+
+    //database is loaded, we go to ui_main()
+    ui_main(d);
+  }
+
+#else
+  #include <dirent.h>
+  void ui_load_database()
+  {
+    printf("Chose a database to load :\n");
+
+    int i = 1, len;
+    char buffer[50];
+    DIR *dir;
+    //Displays the databases to chose from
+    struct dirent *current_dir;
+    dir = opendir("saves");
+    readdir(dir);
+    readdir(dir);
+    if (dir) {
+      while ((current_dir = readdir(dir)) != NULL) {
+        printf("%d : %s\n", i, current_dir->d_name);
+        i += 1;
+      }
+      closedir(dir);
+    }
+
+    if (i == 1){ //if no database to chose from
+      printf("No database to chose from !\nPlease create a new database\n");
+      return;
+    }
+
+    int inpt = ui_input_int(1,i-1); //get user input
+    Database d;
+
+    i = 1;
+    dir = opendir("saves");
+    readdir(dir);
+    readdir(dir);
+    //get the database to load from
+    while ((current_dir = readdir(dir)) != NULL) {
+      if (i == inpt){
+        len = strlen(current_dir->d_name);
+        strncpy(buffer, current_dir->d_name, len-4);
+        buffer[len-4] = '\0';
+
+        d = d_load(buffer);
+        break;
+      }
+      i += 1;
+    }
+    closedir(dir);
+
+    //database is loaded, we go to ui_main()
+    ui_main(d);
+  }
+#endif
 
 
 
@@ -97,69 +212,6 @@ void ui_welcome_help()
   printf(" - By typing 2, you will get to create a new database from scratch.\n");
   printf(" - By typing 3, you will get to this help message.\n");
   printf(" - By typing 4, you will stop the execution of this program.\n\n");
-}
-
-
-void ui_load_database()
-{
-  printf("Chose a database to load :\n");
-
-  int i = 1, len;
-  char buffer[50];
-  tinydir_dir dir;
-  tinydir_file file;
-  tinydir_open(&dir, "saves");
-  tinydir_next(&dir);
-  tinydir_next(&dir);
-
-  //displays the databases to chose from
-  while (dir.has_next)
-  {
-    tinydir_readfile(&dir, &file);
-
-    len = strlen(file.name);
-    strncpy(buffer, file.name, len-4);
-    buffer[len-4] = '\0';
-    printf("%d : %s", i, buffer);
-    printf("\n");
-
-    tinydir_next(&dir);
-    i += 1;
-  }
-  tinydir_close(&dir);
-
-  if (i == 1){ //if no database to chose from
-    printf("No database to chose from !\nPlease create a new database\n");
-    return;
-  }
-
-  int inpt = ui_input_int(1,i-1); //get user input
-  Database d;
-
-  i = 1;
-  tinydir_open(&dir, "saves");
-  tinydir_next(&dir);
-  tinydir_next(&dir);
-  //get the database to load from
-  while (dir.has_next)
-  {
-    tinydir_readfile(&dir, &file);
-
-    if (i == inpt){
-      len = strlen(file.name);
-      strncpy(buffer, file.name, len-4);
-      buffer[len-4] = '\0';
-
-      d = d_load(buffer);
-      break;
-    }
-    tinydir_next(&dir);
-    i += 1;
-  }
-  tinydir_close(&dir);
-
-  //database is loaded, we go to ui_main()
-  ui_main(d);
 }
 
 

@@ -10,7 +10,10 @@
 #include "user_interface.h"
 
 //use compiler options :
-//-I include src/*.c lib
+//-I include -I lib src/*.c
+
+//Compile command :
+//gcc main.c src/*.c -o out.exe -I include -I lib
 
 
 
