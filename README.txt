@@ -11,6 +11,6 @@ This is an expert database with the following features :
 
 -----------------------------------------
 
-To compile the program on Windows use the following gcc command :
+You can compile this project on windows and linux with the following command :
 
-gcc main.c -I include -I lib src/*.c
+gcc main.c src/*.c -o out.exe -I include -I lib
