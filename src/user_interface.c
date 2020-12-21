@@ -250,8 +250,8 @@ void ui_main(Database d)
     printf("4 : edit statement\n");
     printf("5 : add rule\n");
     printf("6 : remove rule\n");
-    printf("7 : edit rule conclusion\n");
-    printf("8 : \n");
+    printf("7 : edit rule premise\n");
+    printf("8 : edit rule conclusion\n");
     printf("9 : \n");
     printf("0 : quit\n");
 
@@ -284,7 +284,11 @@ void ui_main(Database d)
       ui_remove_rule(d);
       break;
 
-    case 7: //edit rule conclusion
+    case 7: //edit rule premise
+      ui_edit_rule_premise(d);
+      break;
+
+    case 8: //edit rule conclusion
       ui_edit_rule_conlusion(d);
       break;
 
@@ -417,6 +421,80 @@ void ui_remove_rule(Database d)
   }
 
   d.rules = r_remove_id(d.rules, inpt);
+}
+
+
+void ui_edit_rule_premise(Database d)
+{
+  if (d.rules == NULL){
+    printf("This database hase no rules!\n");
+    return;
+  }
+
+  //Get the rule that the user want to edit the conclusion
+  r_print(d.rules, d.statements);
+  printf("-1 : cancel\n");
+  printf("Please the rule that need to change premise\n");
+
+  int inpt, rule_id;
+  inpt = ui_input_int(0,10000);
+  while (!r_contains(d.rules, inpt)){
+    if (inpt == -1){
+      return;
+    }
+    printf("Id not found in this database statement list.\n Please input again : ");
+    inpt = ui_input_int(0,10000);
+  }
+  rule_id = inpt;
+
+  //Inpute new premise
+  s_print(d.statements);
+  printf("Chose from the database's statments those that are part of this new rule premise.\n");
+  printf("You can for example input : \"1,3,4\" to select statments 1,3 and 4 to be in the premise\n");
+  printf("Selected statments : ");
+
+  char inpt_char[255];
+  char forbiden_char[85] = "/\\. ;':|()!@#$%^&*_+-=<>?[]{}abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  ui_input_char(inpt_char, forbiden_char);
+
+  i_list premise = NULL;ΩΩΩΩΩΩΩ
+  premise = i_insert(premise, 2);
+  int head, head2, id_premise;
+  char c[12];
+  bool loop = true;
+
+  while (loop){
+    premise = i_empty(premise);
+    loop = false;
+    ui_input_char(inpt_char, forbiden_char);
+
+    head = 0;
+    while (inpt_char[head] != '\0'){
+      head2 = 0;
+      while (inpt_char[head] != ',' && inpt_char[head] != '\0'){
+        c[head2] = inpt_char[head];
+        head += 1;
+        head2 += 1;
+      }
+      c[head2] = '\0';
+      id_premise = atoi(c);
+      if (!s_contains(d.statements, id_premise)){
+        printf("Id not found in this database statement list.\n Please input again : ");
+        loop = true;
+      }
+
+      premise = i_insert(premise, id_premise);
+
+      if (inpt_char[head] != '\0'){
+        head += 1;
+      }
+    }
+  }
+
+  printf("Selected statments for the premise : ");
+  i_print(premise);
+
+  r_get_from_id(d.rules, rule_id)->premise = i_copy(premise);
 }
 
 
