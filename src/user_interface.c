@@ -250,7 +250,7 @@ void ui_main(Database d)
     printf("4 : edit statement\n");
     printf("5 : add rule\n");
     printf("6 : remove rule\n");
-    printf("7 : \n");
+    printf("7 : edit rule conclusion\n");
     printf("8 : \n");
     printf("9 : \n");
     printf("0 : quit\n");
@@ -282,6 +282,10 @@ void ui_main(Database d)
 
     case 6: //remove rule
       ui_remove_rule(d);
+      break;
+
+    case 7: //edit rule conclusion
+      ui_edit_rule_conlusion(d);
       break;
 
     case 0: //quit
@@ -415,6 +419,48 @@ void ui_remove_rule(Database d)
   d.rules = r_remove_id(d.rules, inpt);
 }
 
+
+void ui_edit_rule_conlusion(Database d)
+{
+  if (d.rules == NULL){
+    printf("This database hase no rules!\n");
+    return;
+  }
+
+  //Get the rule that the user want to edit the conclusion
+  r_print(d.rules, d.statements);
+  printf("-1 : cancel\n");
+  printf("Please the rule that need to change conclusion\n");
+
+  int inpt, rule_id, statment_id;
+  inpt = ui_input_int(0,10000);
+  while (!r_contains(d.rules, inpt)){
+    if (inpt == -1){
+      return;
+    }
+    printf("Id not found in this database statement list.\n Please input again : ");
+    inpt = ui_input_int(0,10000);
+  }
+  rule_id = inpt;
+
+  //Get the statment that will be the new conclusion of the previously chose rule
+  s_print(d.statements);
+  printf("-1 : cancel\n");
+  printf("Chose a statment to be the conclusion of the previously chosen rule\n");
+
+  inpt = ui_input_int(0,10000);
+  while (!s_contains(d.statements, inpt)){
+    if (inpt == -1){
+      return;
+    }
+    printf("Id not found in this database statement list.\n Please input again : ");
+    inpt = ui_input_int(0,10000);
+  }
+  statment_id = inpt;
+
+  //Make the change
+  r_get_from_id(d.rules, rule_id)->conclusion = statment_id;
+}
 
 
 

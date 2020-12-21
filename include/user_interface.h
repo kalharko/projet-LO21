@@ -36,5 +36,7 @@ void ui_add_rule(Database d);
 //Interface to remove a rule from the given database
 void ui_remove_rule(Database d);
 
+//Interface to edit a rule's conclusion from the given database
+void ui_edit_rule_conlusion(Database d);
 
 #endif
