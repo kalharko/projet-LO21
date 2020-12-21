@@ -165,6 +165,7 @@ void ui_input_char(char * inpt_char, char * forbiden_char)
   }
 }
 
+
 int ui_welcome()
 {
   printf("\n\nWelcome to my Expert Database I made as a school project.\nUTBM LO21 - A2020\n");
@@ -248,13 +249,13 @@ void ui_main(Database d)
     printf("3 : add statement\n");
     printf("4 : edit statement\n");
     printf("5 : add rule\n");
-    printf("6 : \n");
+    printf("6 : remove rule\n");
     printf("7 : \n");
     printf("8 : \n");
     printf("9 : \n");
-    printf("0 : \n");
+    printf("0 : quit\n");
 
-    inpt = ui_input_int(1,12);
+    inpt = ui_input_int(0,12);
 
     switch(inpt) {
     case 1: //show database statement
@@ -277,6 +278,19 @@ void ui_main(Database d)
 
     case 5: //add rule
       ui_add_rule(d);
+      break;
+
+    case 6: //remove rule
+      ui_remove_rule(d);
+      break;
+
+    case 0: //quit
+      printf("Save database ?\n1 : Yes\n2 : No\n");
+      inpt = ui_input_int(1,2);
+      if (inpt == 1){
+        d_save(d);
+      }
+      loop = false;
       break;
 
     default : //Raise error
@@ -376,6 +390,30 @@ void ui_add_rule(Database d)
   d = d_append_rule(d, premise, inpt);
 }
 
+
+void ui_remove_rule(Database d)
+{
+  if (d.rules == NULL){
+    printf("This database hase no rules!\n");
+    return;
+  }
+
+  r_print(d.rules, d.statements);
+  printf("-1 : cancel\n");
+  printf("Please chose a rule to delete\n");
+
+  int inpt;
+  inpt = ui_input_int(0,10000);
+  while (!r_contains(d.rules, inpt)){
+    if (inpt == -1){
+      return;
+    }
+    printf("Id not found in this database statement list.\n Please input again : ");
+    inpt = ui_input_int(0,10000);
+  }
+
+  d.rules = r_remove_id(d.rules, inpt);
+}
 
 
 
