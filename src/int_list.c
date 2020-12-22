@@ -89,6 +89,19 @@ i_list i_copy(i_list i)
 }
 
 
+i_list i_concat(i_list i1, i_list i2)
+{
+  int_list_elem * current = i2;
+  while (current != NULL){
+    i1 = i_insert(i1, current->value);
+    current = current->next;
+  }
+
+  return i1;
+}
+
+
+
 /* i_list look up */
 
 bool i_contains(i_list i, int value)

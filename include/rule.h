@@ -57,4 +57,8 @@ r_list r_set_conclusion(r_list r, int id_rule, int id_statement);
 //Displays the given rule's informations
 void r_print(r_list r, s_list s);
 
+
+  //Inference engine prototypes
+bool r_test(Rule * r, i_list facts);
+
 #endif

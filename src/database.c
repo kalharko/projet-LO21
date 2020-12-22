@@ -40,8 +40,6 @@ Database d_append_rule(Database d, i_list premise, int conclusion)
 
   d.rules = r_insert(d.rules, id, i_copy(premise), conclusion);
 
-  // r_print(&new_rule, d.statements);
-
   return d;
 }
 
@@ -231,6 +229,35 @@ void d_print(Database d)
 }
 
 
+  //Inference engine prototypes
+
+i_list d_inference_engine(Database d, i_list facts)
+{
+  Rule * current_rule;
+  i_list true_rules = NULL;
+  i_list new_facts = NULL;
+  int nb_true;
+
+  while (nb_true > 0){
+    nb_true = 0;
+    current_rule = d.rules;
+
+    while (current_rule != NULL){
+      if (!i_contains(true_rules, current_rule->id)){
+        if (r_test(current_rule, facts)){
+          true_rules = i_insert(true_rules, current_rule->id);
+          facts = i_insert(facts, current_rule->conclusion);
+          new_facts = i_insert(new_facts, current_rule->conclusion);
+          nb_true += 1;
+        }
+      }
+      current_rule = current_rule->next;
+    }
+
+  }
+
+  return new_facts;
+}
 
 
 

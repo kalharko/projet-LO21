@@ -252,7 +252,7 @@ void ui_main(Database d)
     printf("6 : remove rule\n");
     printf("7 : edit rule premise\n");
     printf("8 : edit rule conclusion\n");
-    printf("9 : \n");
+    printf("9 : use the inference engine\n");
     printf("0 : quit\n");
 
     inpt = ui_input_int(0,12);
@@ -290,6 +290,10 @@ void ui_main(Database d)
 
     case 8: //edit rule conclusion
       ui_edit_rule_conlusion(d);
+      break;
+
+    case 9: //go to the inference engine menu
+      ui_inference_engine(d);
       break;
 
     case 0: //quit
@@ -434,7 +438,7 @@ void ui_edit_rule_premise(Database d)
   //Get the rule that the user want to edit the conclusion
   r_print(d.rules, d.statements);
   printf("-1 : cancel\n");
-  printf("Please the rule that need to change premise\n");
+  printf("Please input the id of the rule that need to change premise\n");
 
   int inpt, rule_id;
   inpt = ui_input_int(0,10000);
@@ -457,7 +461,7 @@ void ui_edit_rule_premise(Database d)
   char forbiden_char[85] = "/\\. ;':|()!@#$%^&*_+-=<>?[]{}abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
   ui_input_char(inpt_char, forbiden_char);
 
-  i_list premise = NULL;ΩΩΩΩΩΩΩ
+  i_list premise = NULL;
   premise = i_insert(premise, 2);
   int head, head2, id_premise;
   char c[12];
@@ -541,7 +545,71 @@ void ui_edit_rule_conlusion(Database d)
 }
 
 
+void ui_inference_engine(Database d)
+{
+  s_print(d.statements);
+  printf("-1 : cancel");
+  printf("Please insert a serie of facts.\n");
+  printf("i.e. a serie of statments that are true\n");
+  printf("You can for example input : \"1,3,4\" to select statments 1,3 and 4 to be in the premise\n");
+  printf("Selected statments : ");
 
+  char inpt_char[255];
+  char forbiden_char[85] = "/\\. ;':|()!@#$%^&*_+-=<>?[]{}abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  ui_input_char(inpt_char, forbiden_char);
+
+  i_list facts = NULL;
+  facts = i_insert(facts, 2);
+  int head, head2, id_premise;
+  char c[12];
+  bool loop = true;
+
+  while (loop){
+    facts = i_empty(facts);
+    loop = false;
+    ui_input_char(inpt_char, forbiden_char);
+
+    head = 0;
+    while (inpt_char[head] != '\0'){
+      head2 = 0;
+      while (inpt_char[head] != ',' && inpt_char[head] != '\0'){
+        c[head2] = inpt_char[head];
+        head += 1;
+        head2 += 1;
+      }
+      c[head2] = '\0';
+      id_premise = atoi(c);
+      if (!s_contains(d.statements, id_premise)){
+        printf("Id not found in this database statement list.\n Please input again : ");
+        loop = true;
+      }
+
+      facts = i_insert(facts, id_premise);
+
+      if (inpt_char[head] != '\0'){
+        head += 1;
+      }
+    }
+  }
+
+  printf("Selected statments for the fact list :\n");
+  i_print(facts);
+
+  printf("Inference engine running.\n");
+
+  i_list new_facts = NULL;
+  new_facts = d_inference_engine(d, facts);
+
+  printf("Inference engine finished running.\n");
+  printf("New facts deduced by the inference engine :\n");
+  i_print(new_facts);
+  s_print_from_int_list(d.statements, new_facts);
+
+  printf("Totality of the true statments :\n");
+  i_list concat = NULL;
+  concat = i_concat(facts, new_facts);
+  i_print(concat);
+}
 
 
 

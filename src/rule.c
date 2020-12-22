@@ -154,3 +154,20 @@ void r_print(r_list r, s_list s)
     }
   }
 }
+
+
+bool r_test(Rule * r, i_list facts)
+{
+  bool out = true;
+  int_list_elem * current_int = r->premise;
+  while (current_int != NULL && i_contains(facts, current_int->value)){
+    current_int = current_int->next;
+  }
+
+  if (current_int == NULL){
+    return true;
+  }
+  else{
+    return false;
+  }
+}

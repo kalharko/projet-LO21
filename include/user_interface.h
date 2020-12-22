@@ -42,4 +42,7 @@ void ui_edit_rule_premise(Database d);
 //Interface to edit a rule's conclusion from the given database
 void ui_edit_rule_conlusion(Database d);
 
+//Inference engine interface
+void ui_inference_engine(Database d);
+
 #endif

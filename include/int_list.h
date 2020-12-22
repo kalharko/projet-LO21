@@ -30,6 +30,8 @@ i_list i_empty(i_list i);
 //Returns the adress of a new identique i_list
 i_list i_copy(i_list i);
 
+//Returns a list with the values of the two given lists
+i_list i_concat(i_list i1, i_list i2);
 
 
   /* i_list look up */

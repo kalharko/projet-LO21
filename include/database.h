@@ -36,4 +36,11 @@ Database d_load(char * name);
 //Displays the name of the given database followed by it's statements and rules
 void d_print(Database d);
 
+
+//Inference engine prototypes
+
+//Returns the list of statments true after running the given fact list in the
+//inference engine of the given database
+i_list d_inference_engine(Database d, i_list facts);
+
 #endif
