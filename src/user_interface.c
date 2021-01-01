@@ -277,7 +277,7 @@ void ui_main(Database d)
       break;
 
     case 5: //add rule
-      ui_add_rule(d);
+      d = ui_add_rule(d);
       break;
 
     case 6: //remove rule
@@ -344,8 +344,9 @@ void ui_edit_statment(Database d)
 }
 
 
-void ui_add_rule(Database d)
+Database ui_add_rule(Database d)
 {
+  //Get the statments of the new rule
   s_print(d.statements);
   printf("Chose from the database's statments those that are part of this new rule premise.\n");
   printf("You can for example input : \"1,3,4\" to select statments 1,3 and 4 to be in the premise\n");
@@ -392,6 +393,7 @@ void ui_add_rule(Database d)
   printf("Selected statments for the premise : ");
   i_print(premise);
 
+  //Get the conclusion of the new rule
   printf("\nNow chose a unique statment to be used as this new rule conclusion :\n");
   inpt = ui_input_int(0,10000);
   while (!s_contains(d.statements, inpt)){
@@ -399,7 +401,10 @@ void ui_add_rule(Database d)
     inpt = ui_input_int(0,10000);
   }
 
+  //Add the new rule to the data
   d = d_append_rule(d, premise, inpt);
+
+  return d;
 }
 
 

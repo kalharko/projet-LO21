@@ -19,7 +19,8 @@ r_list r_insert(r_list rule_list, int id, i_list premise, int conclusion)
     new_rule->next = NULL;
 
     if (rule_list == NULL){
-      rule_list = new_rule;
+      // rule_list = new_rule;
+      return new_rule;
     }
     else{
       Rule * current = rule_list;

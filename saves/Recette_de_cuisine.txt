@@ -1,0 +1,32 @@
+0 : Oeufs
+1 : Farine
+2 : Lait
+3 : Sucre
+4 : Levure
+5 : Vanille
+6 : Huile d'olive
+7 : Pâte à crèpe
+8 : Eau
+9 : Sel
+10 : Pain
+11 : Reblochon
+12 : Pomme de terre
+13 : Vin blanc
+14 : Oignon
+15 : Lardons
+16 : Beurre
+17 : Tartiflette végétarienne
+18 : Tartiflette
+19 : Salade
+20 : Cantal
+21 : Rosette
+22 : Sandwich jambon fromage
+23 : jambon
+24 : Emmental
+|
+0 : 1,2,3;7
+1 : 1,8,9;10
+2 : 11,12,13,14;17
+3 : 15,17;18
+4 : 10,23,24;22
+|

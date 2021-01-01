@@ -31,7 +31,7 @@ void ui_edit_statment(Database d);
 
 
 //Interface to add a rule to the database
-void ui_add_rule(Database d);
+Database ui_add_rule(Database d);
 
 //Interface to remove a rule from the given database
 void ui_remove_rule(Database d);
