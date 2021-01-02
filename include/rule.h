@@ -59,6 +59,12 @@ void r_print(r_list r, s_list s);
 
 
   //Inference engine prototypes
+//Function to test if a rule has all true statments in it’s premise
+//Parameters : 
+//    -r, a pointer to the studied rule.
+//    -facts, a list of integer that represent the ids of the statments that are tknown true.
+//Returns :
+//    -out, a booleen that is true if all the statments in the studied rule’s premise are true
 bool r_test(Rule * r, i_list facts);
 
 #endif

@@ -39,8 +39,15 @@ void d_print(Database d);
 
 //Inference engine prototypes
 
-//Returns the list of statments true after running the given fact list in the
-//inference engine of the given database
+//Inference engine function :
+//Parameters :
+//    -d, the database to be tested.
+//    -facts, a list of integer that represent the ids of the statments that are true before the
+//                engine runs.
+//Returns :
+//    -new_facts, a list of integer that represent the ids of the statments that were false befor
+//                the engine runs and that are true after.
+
 i_list d_inference_engine(Database d, i_list facts);
 
 #endif
