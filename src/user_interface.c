@@ -12,7 +12,7 @@
     printf("Chose a database to load :\n");
 
     int i = 1, len;
-    char buffer[50];
+    char buffer[2048];
     tinydir_dir dir;
     tinydir_file file;
     tinydir_open(&dir, "saves");
@@ -76,7 +76,7 @@
     printf("Chose a database to load :\n");
 
     int i = 1, len;
-    char buffer[50];
+    char buffer[2048];
     DIR *dir;
     //Displays the databases to chose from
     struct dirent *current_dir;
@@ -106,9 +106,10 @@
     //get the database to load from
     while ((current_dir = readdir(dir)) != NULL) {
       if (i == inpt){
-        len = strlen(current_dir->d_name);
-        strncpy(buffer, current_dir->d_name, len-4);
-        buffer[len-4] = '\0';
+        len = strlen(current_dir->d_name) - 4;
+        if (len < 0) len = 0;
+        strncpy(buffer, current_dir->d_name, len);
+        buffer[len] = '\0';
 
         d = d_load(buffer);
         break;
@@ -130,7 +131,7 @@ int ui_input_int(int min, int max)
   int inpt_int;
   printf("Go to : ");
   fflush(stdin);
-  scanf("%s", inpt_char);
+  fgets(inpt_char, 12, stdin);
 
   inpt_int = atoi(inpt_char);
   while (inpt_int > max || inpt_int < min){
@@ -140,7 +141,7 @@ int ui_input_int(int min, int max)
     printf("Please input a number between %d and %d\n", min, max);
     printf("Go to : ");
     fflush(stdin);
-    scanf("%s", inpt_char);
+    fgets(inpt_char, 12, stdin);
     inpt_int = atoi(inpt_char);
   }
 
@@ -153,16 +154,17 @@ void ui_input_char(char * inpt_char, char * forbiden_char)
 {
   char *test_result;
   fflush(stdin);
-  scanf("%[^\n]", inpt_char);
+  fgets(inpt_char, 255, stdin);
 
   test_result = strpbrk(inpt_char, forbiden_char);
-  while (test_result){
+  while (test_result) {
     printf("These characters are forbiden : \"%s\"\n", forbiden_char);
     printf("Please input again : ");
     fflush(stdin);
-    scanf("%s", inpt_char);
+    fgets(inpt_char, 255, stdin);
     test_result = strpbrk(inpt_char, forbiden_char);
   }
+  inpt_char[strlen(inpt_char) - 1] = 0; // remove the \n
 }
 
 
@@ -354,7 +356,6 @@ Database ui_add_rule(Database d)
 
   char inpt_char[255];
   char forbiden_char[85] = "/\\. ;':|()!@#$%^&*_+-=<>?[]{}abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  ui_input_char(inpt_char, forbiden_char);
 
   i_list premise = NULL;
   premise = i_insert(premise, 2);
@@ -464,7 +465,6 @@ void ui_edit_rule_premise(Database d)
 
   char inpt_char[255];
   char forbiden_char[85] = "/\\. ;':|()!@#$%^&*_+-=<>?[]{}abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  ui_input_char(inpt_char, forbiden_char);
 
   i_list premise = NULL;
   premise = i_insert(premise, 2);
@@ -561,7 +561,6 @@ void ui_inference_engine(Database d)
 
   char inpt_char[255];
   char forbiden_char[85] = "/\\. ;':|()!@#$%^&*_+-=<>?[]{}abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  ui_input_char(inpt_char, forbiden_char);
 
   i_list facts = NULL;
   facts = i_insert(facts, 2);
