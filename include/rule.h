@@ -7,8 +7,8 @@
 
 
 
-//Declaration of a rule, made of statements making the premise and a statement
-//As conclusion
+//Declaration of a rule, the premise is a list of statment's ids
+//Teh conclusion is a statment's id
 typedef struct rule {
   int id;
   i_list premise;
@@ -60,7 +60,7 @@ void r_print(r_list r, s_list s);
 
   //Inference engine prototypes
 //Function to test if a rule has all true statments in it’s premise
-//Parameters : 
+//Parameters :
 //    -r, a pointer to the studied rule.
 //    -facts, a list of integer that represent the ids of the statments that are tknown true.
 //Returns :

@@ -7,8 +7,8 @@
 
 typedef struct Database{
   char * name;
-  r_list rules;
   s_list statements;
+  r_list rules;
 }Database;
 
 
